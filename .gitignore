@@ -2,3 +2,6 @@
 .DS_Store
 node_modules
 build
+
+# TODO: remove once these are configurable in the extension itself
+shells/webextension/src/requestConfig.js
