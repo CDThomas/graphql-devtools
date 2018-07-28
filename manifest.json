@@ -1,0 +1,12 @@
+{
+  "name": "GraphQL Extension",
+  "version": "1.0",
+  "description": "GraphQL Extension",
+  "permissions": [],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "devtools_page": "devtools.html",
+  "manifest_version": 2
+}
