@@ -27,7 +27,32 @@ class App extends Component {
   render() {
     return (
       <div className="wrapper">
-        <GraphiQL fetcher={graphQLFetcher} />
+        <GraphiQL
+          fetcher={graphQLFetcher}
+          ref={ref => {
+            this.graphiql = ref;
+          }}
+        >
+          <GraphiQL.Toolbar>
+            <GraphiQL.Button
+              onClick={(...args) => {
+                // XXX Check that the ref has been bound and forward the call to the instance of GraphiQL
+                this.graphiql && this.graphiql.handlePrettifyQuery(...args);
+              }}
+              title="Prettify Query (Shift-Ctrl-P)"
+              label="Prettify"
+            />
+            <GraphiQL.Button
+              onClick={(...args) => {
+                // XXX Check that the ref has been bound and forward the call to the instance of GraphiQL
+                this.graphiql && this.graphiql.handleToggleHistory(...args);
+              }}
+              title="Show History"
+              label="History"
+            />
+            <GraphiQL.Button onClick={() => {}} title="title" label="Network" />
+          </GraphiQL.Toolbar>
+        </GraphiQL>
       </div>
     );
   }
