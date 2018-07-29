@@ -1,27 +1,7 @@
 import React, { Component } from "react";
 import { render } from "react-dom";
 import GraphiQL from "graphiql";
-import { host, headers as configHeaders } from "./requestConfig";
 import "graphiql/graphiql.css";
-
-function graphQLFetcher(graphQLParams) {
-  // TODO: make headers, host, path, and credentials configurable
-
-  const headers = {
-    Accept: "application/json",
-    "Content-Type": "application/json",
-    ...configHeaders
-  };
-
-  return window
-    .fetch(`${host}/graphql`, {
-      method: "POST",
-      headers,
-      credentials: "same-origin",
-      body: JSON.stringify(graphQLParams)
-    })
-    .then(response => response.json());
-}
 
 class App extends Component {
   state = {
@@ -43,35 +23,69 @@ class App extends Component {
   render() {
     return (
       <div className="wrapper">
-        <GraphiQL
-          fetcher={graphQLFetcher}
-          ref={ref => {
-            this.graphiql = ref;
-          }}
-        >
-          <GraphiQL.Toolbar>
-            <GraphiQL.Button
-              onClick={(...args) => {
-                // XXX Check that the ref has been bound and forward the call to the instance of GraphiQL
-                this.graphiql && this.graphiql.handlePrettifyQuery(...args);
-              }}
-              title="Prettify Query (Shift-Ctrl-P)"
-              label="Prettify"
-            />
-            <GraphiQL.Button
-              onClick={(...args) => {
-                // XXX Check that the ref has been bound and forward the call to the instance of GraphiQL
-                this.graphiql && this.graphiql.handleToggleHistory(...args);
-              }}
-              title="Show History"
-              label="History"
-            />
-            <GraphiQL.Button onClick={() => {}} title="title" label="Network" />
-          </GraphiQL.Toolbar>
-        </GraphiQL>
+        {this.state.requests.length === 0 ? (
+          <p>Waiting for a GraphQL request...</p>
+        ) : (
+          <GraphiQL
+            fetcher={this.graphQLFetcher}
+            ref={ref => {
+              this.graphiql = ref;
+            }}
+          >
+            <GraphiQL.Toolbar>
+              <GraphiQL.Button
+                onClick={(...args) => {
+                  // XXX Check that the ref has been bound and forward the call to the instance of GraphiQL
+                  this.graphiql && this.graphiql.handlePrettifyQuery(...args);
+                }}
+                title="Prettify Query (Shift-Ctrl-P)"
+                label="Prettify"
+              />
+              <GraphiQL.Button
+                onClick={(...args) => {
+                  // XXX Check that the ref has been bound and forward the call to the instance of GraphiQL
+                  this.graphiql && this.graphiql.handleToggleHistory(...args);
+                }}
+                title="Show History"
+                label="History"
+              />
+              <GraphiQL.Button
+                onClick={() => {}}
+                title="title"
+                label="Network"
+              />
+            </GraphiQL.Toolbar>
+          </GraphiQL>
+        )}
       </div>
     );
   }
+
+  graphQLFetcher = graphQLParams => {
+    if (!this.state.requests.length) {
+      return;
+    }
+
+    let { url, headers } = this.state.requests[0].request;
+    headers = headers
+      .filter(
+        ({ name }) =>
+          // Whitelisted headers
+          ["accept", "content-type"].includes(name.toLowerCase()) ||
+          // Custom header
+          /^x-/.test(name.toLowerCase())
+      )
+      .reduce((acc, { name, value }) => ({ ...acc, [name]: value }), {});
+
+    return window
+      .fetch(url, {
+        method: "POST",
+        headers,
+        credentials: "same-origin",
+        body: JSON.stringify(graphQLParams)
+      })
+      .then(response => response.json());
+  };
 }
 
 render(<App />, document.getElementById("app"));
