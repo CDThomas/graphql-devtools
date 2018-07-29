@@ -24,6 +24,22 @@ function graphQLFetcher(graphQLParams) {
 }
 
 class App extends Component {
+  state = {
+    requests: []
+  };
+
+  componentDidMount() {
+    // TODO: Is there a way to clean up this listener later? The Chrome docs don't mention it.
+    // TODO: Don't use chrome.devtools directly here
+    chrome.devtools.network.onRequestFinished.addListener(request => {
+      if (request.request.url.includes("/graphql")) {
+        this.setState(prevState => ({
+          requests: [...prevState.requests, request]
+        }));
+      }
+    });
+  }
+
   render() {
     return (
       <div className="wrapper">
