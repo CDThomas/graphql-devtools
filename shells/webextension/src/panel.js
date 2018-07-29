@@ -62,6 +62,8 @@ class App extends Component {
   }
 
   graphQLFetcher = graphQLParams => {
+    // TODO: Handle "Authorization" header. Right now this only works with cookies
+    // TODO: Look into handling CORS requests. This might work with a content script
     if (!this.state.requests.length) {
       return;
     }
@@ -72,7 +74,7 @@ class App extends Component {
         ({ name }) =>
           // Whitelisted headers
           ["accept", "content-type"].includes(name.toLowerCase()) ||
-          // Custom header
+          // Custom headers
           /^x-/.test(name.toLowerCase())
       )
       .reduce((acc, { name, value }) => ({ ...acc, [name]: value }), {});
