@@ -2,7 +2,7 @@
   "name": "GraphQL Extension",
   "version": "1.0",
   "description": "GraphQL Extension",
-  "permissions": [],
+  "permissions": ["tabs", "http://*/*", "https://*/*"],
   "background": {
     "scripts": ["build/background.js"],
     "persistent": false
