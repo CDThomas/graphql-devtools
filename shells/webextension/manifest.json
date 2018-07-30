@@ -2,10 +2,10 @@
   "name": "GraphQL Extension",
   "version": "1.0",
   "description": "GraphQL Extension",
-  "permissions": ["tabs", "http://*/*", "https://*/*"],
+  "permissions": ["tabs", "webRequest", "<all_urls>"],
   "background": {
     "scripts": ["build/background.js"],
-    "persistent": false
+    "persistent": true
   },
   "devtools_page": "devtools.html",
   "manifest_version": 2
