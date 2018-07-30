@@ -1,4 +1,4 @@
-// Note have to use persistent=true in manigest to use webRequest API
+// Note have to use persistent=true in manifest to use webRequest API
 
 function logURL(requestDetails) {
   console.log("Loading: " + requestDetails.url);
@@ -11,7 +11,7 @@ function logAll(label) {
   };
 }
 
-// Can naively collect these into something that looks like
+// Can naively collect these into something that looks like:
 // reqs = {
 //   "227976": [reqHeaders, reqBody, respHeaders],
 //   "228542": [reqHeaders, reqBody, respBodyHeaders],
@@ -23,7 +23,7 @@ function logAll(label) {
 // Or could do the simplest case first and only send reqHeaders to Electron app
 // and then build on that.
 
-// After that works, can looks into obersables.
+// After that works, can looks into obervables.
 // See:
 // - http://reactivex.io/rxjs/class/es6/Observable.js~Observable.html#instance-method-mergeScan
 // - https://frontendmasters.com/courses/asynchronous-javascript/
